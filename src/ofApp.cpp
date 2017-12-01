@@ -44,10 +44,12 @@ void ofApp::reset() {
     particles.clear();
     forces->clear();
     anchorConstraints.clear();
-    xStart = -nTotal / 2;
-    if(-nTotal % 2 == 0) {
-        xStart += 0.5f;
-    }
+    distance = guiDistance;
+    length = guiLength;
+    float fullDistance = distance * nTotal;
+    xStart = -(nTotal + fullDistance) / 2;
+    xStart += 0.5f + (distance / 2);
+    
     float xPos = xStart;
     
     for(int i = 0; i < nTotal; i++) {
@@ -76,7 +78,7 @@ void ofApp::reset() {
         ball->setRadius(ballRadius);
         ball->setBodyColor({255, 0, 0});
         
-        xPos += ballRadius * 2.0f;
+        xPos += ballRadius * 2.0f + distance;
         forces->add(ball, gravity);
         particles.push_back(ball);
         
@@ -132,21 +134,29 @@ void ofApp::draw() {
     ofSetColor(255, 0, 0);
     ofFill();
     
-    ofDrawBox(0.0f, boardHeight + 0.5f, 0, 10.0f, 1.0f, 1.0f);
+    float width = abs(xStart) * 2.0f + 3.0f;
+    
+    ofDrawBox(0.0f, boardHeight,  2.0f, width + 0.5f, 1.0f, 0.5f);
+    ofDrawBox(0.0f, boardHeight, -2.0f, width + 0.5f, 1.0f, 0.5f);
+    
+    ofDrawBox(-width / 2, boardHeight / 2, -2.0f, 0.5f, boardHeight, 0.5f);
+    ofDrawBox(-width / 2, boardHeight / 2, 2.0f, 0.5f, boardHeight, 0.5f);
+    ofDrawBox(width / 2, boardHeight / 2, -2.0f, 0.5f, boardHeight, 0.5f);
+    ofDrawBox(width / 2, boardHeight / 2, 2.0f, 0.5f, boardHeight, 0.5f);
     
     float xPos = xStart;
     
     for(Particle::Ref particle : particles) {
         ofSetColor(255, 255, 0);
-        ofDrawLine(xPos, boardHeight, -0.5, particle->position.x, particle->position.y, 0);
-        ofDrawLine(xPos, boardHeight, 0.5, particle->position.x, particle->position.y, 0);
+        ofDrawLine(xPos, boardHeight-0.5f, -2.0, particle->position.x, particle->position.y, 0);
+        ofDrawLine(xPos, boardHeight-0.5f, 2.0, particle->position.x, particle->position.y, 0);
         
         ofSetColor(255, 255, 255);
-        ofDrawSphere(xPos, boardHeight, -0.5, 0.1f);
-        ofDrawSphere(xPos, boardHeight, 0.5, 0.1f);
+        ofDrawSphere(xPos, boardHeight - 0.5f, -2.0f, 0.1f);
+        ofDrawSphere(xPos, boardHeight - 0.5f, 2.0, 0.1f);
         
         particle->draw();
-        xPos += ballRadius * 2.0f;
+        xPos += ballRadius * 2.0f + distance;
     }
     // TODO - simulation specific stuff goes here
 
@@ -248,10 +258,10 @@ void ofApp::drawMainWindow() {
         ImGui::Text("   Time = %8.1f", t);
         if(ImGui::Button("Quit")) quit();
         
-        ImGui::SliderInt("Number of boobs", &nTotal, 2, 10);
+        ImGui::SliderInt("Number of bobs", &nTotal, 1, 20);
         ImGui::SliderInt("Number of perturbe", &nPerturb, 1, nTotal);
         ImGui::SliderFloat("Angle (deg)", &perturbAngle, 0, 90.0f);
-        
+        ImGui::SliderFloat("Distance between bobs", &guiDistance, 0, 1.0f);
         
         if (ImGui::CollapsingHeader("Numerical Output")) {
             // TODO - numeric output goes here

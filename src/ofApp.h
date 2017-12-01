@@ -76,7 +76,9 @@ public:
     int nTotal = 4;
     int nPerturb = 1;
     float perturbAngle = 45.0f;
+    float guiDistance = 0.0f;
     float distance = 0.0f;
+    float guiLength = 5.0f;
     float length = 5.0f;
     float boardHeight = 8.0f;
     float ballRadius = 0.5f;
