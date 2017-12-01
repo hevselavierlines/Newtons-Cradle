@@ -39,13 +39,13 @@ void ofApp::setup() {
 }
 
 void ofApp::reset() {
-
     t = 0.0f;
     particles.clear();
     forces->clear();
     anchorConstraints.clear();
     distance = guiDistance;
     length = guiLength;
+    boardHeight = guiBoardHeight;
     float fullDistance = distance * nTotal;
     xStart = -(nTotal + fullDistance) / 2;
     xStart += 0.5f + (distance / 2);
@@ -75,8 +75,10 @@ void ofApp::reset() {
         }
         
         ball->setPosition(ballPos);
+        ball->setMass(ballRadius);
         ball->setRadius(ballRadius);
         ball->setBodyColor({255, 0, 0});
+        ball->setDamping(1.0f);
         
         xPos += ballRadius * 2.0f + distance;
         forces->add(ball, gravity);
@@ -143,6 +145,7 @@ void ofApp::draw() {
     ofDrawBox(-width / 2, boardHeight / 2, 2.0f, 0.5f, boardHeight, 0.5f);
     ofDrawBox(width / 2, boardHeight / 2, -2.0f, 0.5f, boardHeight, 0.5f);
     ofDrawBox(width / 2, boardHeight / 2, 2.0f, 0.5f, boardHeight, 0.5f);
+    ofDrawBox(0, 0.5f, 0, width + 0.5f, 1.0f, 4.5f);
     
     float xPos = xStart;
     
@@ -158,8 +161,6 @@ void ofApp::draw() {
         particle->draw();
         xPos += ballRadius * 2.0f + distance;
     }
-    // TODO - simulation specific stuff goes here
-
     
     easyCam.end();
     ofPopStyle();
@@ -170,7 +171,6 @@ void ofApp::draw() {
     drawMainWindow();
     drawLoggingWindow();
     gui.end();
-    
 }
 
 
@@ -260,8 +260,10 @@ void ofApp::drawMainWindow() {
         
         ImGui::SliderInt("Number of bobs", &nTotal, 1, 20);
         ImGui::SliderInt("Number of perturbe", &nPerturb, 1, nTotal);
-        ImGui::SliderFloat("Angle (deg)", &perturbAngle, 0, 90.0f);
+        ImGui::SliderFloat("Angle (deg)", &perturbAngle, 0, 90.0f, "%2.1f");
         ImGui::SliderFloat("Distance between bobs", &guiDistance, 0, 1.0f);
+        ImGui::SliderFloat("Board height", &guiBoardHeight, 3.5f, 12.0f, "%2.1f");
+        ImGui::SliderFloat("Bob length", &guiLength, 1.0f, guiBoardHeight - 1.5f, "%2.1f");
         
         if (ImGui::CollapsingHeader("Numerical Output")) {
             // TODO - numeric output goes here

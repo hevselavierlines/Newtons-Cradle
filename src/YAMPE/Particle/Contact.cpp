@@ -80,11 +80,11 @@ void Contact::resolveVelocity(float dt)
 	
     // Apply impulses: they are applied in the direction of the contact,
     // and are proportional to the inverse mass
-    a->velocity += impulsePerIMass * a->inverseMass();
+    a->velocity += impulsePerIMass * a->inverseMass() * a->damping();
 
 	// Particle b goes in the opposite direction
 	if (b!=NULL) {
-		b->velocity -= impulsePerIMass * b->inverseMass();
+		b->velocity -= impulsePerIMass * b->inverseMass() * b->damping();
     }
 }
 
