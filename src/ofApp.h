@@ -15,6 +15,17 @@
 #include "YAMPE/Particle/ForceGenerators.h"
 #include "YAMPE/Particle/Constraints.h"
 
+#define GRAVITY_SUN     {0, -27.94, 0}
+#define GRAVITY_MERCURY {0, -3.7,   0}
+#define GRAVITY_VENUS   {0, -8.87,  0}
+#define GRAVITY_EARTH   {0, -9.81,  0}
+#define GRAVITY_MARS    {0, -3.711, 0}
+#define GRAVITY_JUPITER {0, -24.79, 0}
+#define GRAVITY_SATURN  {0, -10.44, 0}
+#define GRAVITY_URANUS  {0, -8.69,  0}
+#define GRAVITY_NEPTUNE {0, -11.15, 0}
+#define GRAVITY_PLUTO   {0, -0.620, 0}
+
 class ofApp : public ofBaseApp {
     
 public:
@@ -65,7 +76,7 @@ public:
     ofParameter<std::string> position;
 
     YAMPE::ParticleRegistry particles;
-    std::vector<YAMPE::P::EqualityAnchoredConstraint::Ref> anchorConstraints;
+    std::vector<YAMPE::P::EqualityAnchoredConstraint::Ref> anchorConstraints1;
     
     YAMPE::P::ContactRegistry::Ref contacts;
     YAMPE::P::ParticleParticleContactGenerator particleContact;

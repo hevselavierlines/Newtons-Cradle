@@ -31,7 +31,7 @@ void ofApp::setup() {
     contacts = P::ContactRegistry::Ref(new P::ContactRegistry());
     forces = P::ForceGeneratorRegistry::Ref(new P::ForceGeneratorRegistry());
     
-    gravity = P::GravityForceGenerator::Ref(new P::GravityForceGenerator({0, -9.81, 0}));
+    gravity = P::GravityForceGenerator::Ref(new P::GravityForceGenerator(GRAVITY_EARTH));
     
     // finally start everything off by resetting the simulation
     reset();
@@ -42,7 +42,7 @@ void ofApp::reset() {
     t = 0.0f;
     particles.clear();
     forces->clear();
-    anchorConstraints.clear();
+    anchorConstraints1.clear();
     distance = guiDistance;
     length = guiLength;
     boardHeight = guiBoardHeight;
@@ -84,9 +84,10 @@ void ofApp::reset() {
         forces->add(ball, gravity);
         particles.push_back(ball);
         
-        P::EqualityAnchoredConstraint::Ref constraint =
+        
+        P::EqualityAnchoredConstraint::Ref constraint1 =
         P::EqualityAnchoredConstraint::Ref(new P::EqualityAnchoredConstraint(ball, anchor, length));
-        anchorConstraints.push_back(constraint);
+        anchorConstraints1.push_back(constraint1);
     }
     particleContact.particles = particles;
 }
@@ -103,9 +104,9 @@ void ofApp::update() {
         
         for(int i = 0; i < particles.size(); i++) {
             Particle::Ref particle = particles[i];
-            P::EqualityAnchoredConstraint::Ref constraint = anchorConstraints[i];
+            P::EqualityAnchoredConstraint::Ref constraint1 = anchorConstraints1[i];
             
-            constraint->generate(contacts);
+            constraint1->generate(contacts);
             particleContact.generate(contacts);
             particle->integrate(dt);
         }
