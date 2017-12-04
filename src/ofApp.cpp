@@ -149,12 +149,17 @@ void ofApp::draw() {
     
     float xPos = xStart;
     
-    for(Particle::Ref particle : particles) {
+    for(int i = 0; i < particles.size(); i++) {
+        Particle::Ref particle = particles[i];
         ofSetColor(255, 255, 0);
         ofDrawLine(xPos, boardHeight-0.5f, -2.0, particle->position.x, particle->position.y, 0);
         ofDrawLine(xPos, boardHeight-0.5f, 2.0, particle->position.x, particle->position.y, 0);
         
-        ofSetColor(255, 255, 255);
+        if(i < nPerturb) {
+            ofSetColor(0, 0, 255);
+        } else {
+            ofSetColor(255, 255, 255);
+        }
         ofDrawSphere(xPos, boardHeight - 0.5f, -2.0f, 0.1f);
         ofDrawSphere(xPos, boardHeight - 0.5f, 2.0, 0.1f);
         
